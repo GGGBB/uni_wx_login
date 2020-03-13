@@ -18,6 +18,10 @@ image{  width: 100%;  }
 /* 主边框颜色 */
 .main-border-color{ border-color: #F1F1F1; }
 
+.wx-bg-color{ background: #1aad19; }
+
+.wx-bg-hover-color{ background: rgba(26,173,25,0.85) }
+
 .input-border-color{
 	border-color: #FD6801;
 }

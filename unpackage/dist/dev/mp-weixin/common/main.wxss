@@ -5087,6 +5087,10 @@ page{
 .border-light-secondary{border-color: #F1F1F1!important;}
 .rounded{ border-radius: 5rpx;
 }
+.rounded-1{ border-radius: 10rpx;
+}
+.rounded-2{ border-radius: 20rpx;
+}
 .rounded-circle{ border-radius:100%;
 }
 .rounded-0{ border-radius:0;
@@ -5258,6 +5262,10 @@ image{  width: 100%;
 .main-text-color{color: #FD6801;}
 /* 主边框颜色 */
 .main-border-color{ border-color: #F1F1F1;
+}
+.wx-bg-color{ background: #1aad19;
+}
+.wx-bg-hover-color{ background: rgba(26,173,25,0.85)
 }
 .input-border-color{
 	border-color: #FD6801;

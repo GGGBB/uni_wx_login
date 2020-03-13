@@ -30,7 +30,7 @@
   "subPackages": [],
   "window": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "仿小米商城",
+    "navigationBarTitleText": "uni_shop",
     "navigationBarBackgroundColor": "#FFFFFF",
     "backgroundColor": "#FFFFFF"
   },
@@ -71,5 +71,5 @@
     "loading": "/components/common/loading",
     "loading-plus": "/common/mixin/loading-plus"
   },
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap81.json"
 }

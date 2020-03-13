@@ -46,12 +46,27 @@
 							{ title:"隐私政策",path:"" },
 						]
 					},
-				]
+				],
+				address:{
+					province_id: 0,
+					province_str: "",
+					city_id: 1,
+					city_str: "北京",
+					district_id: 1,
+					district_str: "东城区",
+					address: "sdfsdfsd",
+					recv_mobile: "18098949484",
+					recv_name: "小明",
+					latitude: 0,
+					longitude: 0,
+					is_default: 1
+				}
 			}
 		},
 		computed: {
 			...mapState({
-				loginStatus: state => state.user.loginStatus
+				loginStatus: state => state.user.loginStatus,
+				token: state => state.user.userInfo.token
 			})
 		},
 		methods: {
@@ -63,19 +78,35 @@
 				});
 			},
 			// 退出登录
+			// logoutEvent() {
+			// 	this.$H.post('/logout',{},{
+			// 		token: true,
+			// 		toast: false
+			// 	}).then(res => {
+			// 		this.logout()
+			// 		uni.showToast({
+			// 			title: '退出成功',
+			// 			icon: 'none'
+			// 		})
+			// 		uni:uni.navigateBack({
+			// 			delta: 1
+			// 		})
+			// 	})
+			// }
+			
 			logoutEvent() {
-				this.$H.post('/logout',{},{
-					token: false,
-					toast: false
+				console.log(this.token)
+				this.$H.post('http://47.106.125.164/api.v1/micro-app/order',{},{
 				}).then(res => {
-					this.logout()
-					uni.showToast({
-						title: '退出成功',
-						icon: 'none'
-					})
-					uni:uni.navigateBack({
-						delta: 1
-					})
+					console.log(res)
+					// this.logout()
+					// uni.showToast({
+					// 	title: '退出成功',
+					// 	icon: 'none'
+					// })
+					// uni:uni.navigateBack({
+					// 	delta: 1
+					// })
 				})
 			}
 		}

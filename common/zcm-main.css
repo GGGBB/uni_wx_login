@@ -176,6 +176,8 @@ body{
 .border-light-secondary{border-color: #F1F1F1!important;}
 
 .rounded{ border-radius: 5upx; }
+.rounded-1{ border-radius: 10upx; }
+.rounded-2{ border-radius: 20upx; }
 .rounded-circle{ border-radius:100%; }
 .rounded-0{ border-radius:0; }
 

@@ -1668,7 +1668,7 @@ var _vuex = _interopRequireDefault(__webpack_require__(/*! vuex */ 16));
 
 var _cart = _interopRequireDefault(__webpack_require__(/*! @/store/modules/cart.js */ 17));
 var _path = _interopRequireDefault(__webpack_require__(/*! @/store/modules/path.js */ 18));
-var _user = _interopRequireDefault(__webpack_require__(/*! @/store/modules/user.js */ 468));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+var _user = _interopRequireDefault(__webpack_require__(/*! @/store/modules/user.js */ 19));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
 
 _vue.default.use(_vuex.default);var _default =
 
@@ -2948,94 +2948,63 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 /***/ 19:
 /*!****************************************************************************!*\
-  !*** C:/Users/GGGBB/Documents/Projects/uni_wx_login/common/lib/request.js ***!
+  !*** C:/Users/GGGBB/Documents/Projects/uni_wx_login/store/modules/user.js ***!
   \****************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _index = _interopRequireDefault(__webpack_require__(/*! @/store/index.js */ 15));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _default =
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _regenerator = _interopRequireDefault(__webpack_require__(/*! ./node_modules/@babel/runtime/regenerator */ 20));var _request = _interopRequireDefault(__webpack_require__(/*! @/common/lib/request.js */ 23));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var _default =
+
 {
-  // 全局配置
-  common: {
-    baseUrl: "http://ceshi3.dishait.cn/api",
-    header: _defineProperty({
-      'Content-Type': 'application/json;charset=UTF-8' }, "Content-Type",
-    'application/x-www-form-urlencoded'),
-
-    data: {},
-    method: 'GET',
-    dataType: 'json' },
-
-  // 请求 返回promise
-  request: function request() {var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    // 组织参数
-    options.url = this.common.baseUrl + options.url;
-    options.header = options.header || this.common.header;
-    options.data = options.data || this.common.data;
-    options.method = options.method || this.common.method;
-    options.dataType = options.dataType || this.common.dataType;
-
+  state: {
+    // 登录状态
+    loginStatus: false,
     // token
-    if (options.token) {
-      options.header.token = _index.default.state.user.token;
-      // 二次验证
-      if (options.checkToken && !options.header.token) {
-        uni.showToast({
-          title: '请先登录',
-          icon: 'none' });
+    token: null,
+    // 用户信息
+    userInfo: {} },
 
-        return uni.navigateTo({
-          url: '/pages/login/login' });
+  mutations: {
+    // 初始化登录状态
+    initUser: function () {var _initUser = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(state) {var userInfo, res;return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:
+                userInfo = uni.getStorageSync('userInfo');
+                if (userInfo) {userInfo = JSON.parse(userInfo);}_context.prev = 2;if (
 
-      }
-    }
+                userInfo.token) {_context.next = 5;break;}throw '不合法token';case 5:
+                state.token = userInfo.token;_context.next = 8;return (
+                  _request.default.post('http://47.106.125.164/api.v1/micro-app/login-check', {}, { token: true }));case 8:res = _context.sent;
+                console.log(res);
+                userInfo.token = res.token;
+                state.userInfo = userInfo;
+                state.token = userInfo.token;
+                state.loginStatus = true;
+                console.log(state.loginStatus);
+                // 持久化存储
+                uni.setStorageSync('userInfo', JSON.stringify(state.userInfo));_context.next = 25;break;case 18:_context.prev = 18;_context.t0 = _context["catch"](2);
 
-    // 请求
-    return new Promise(function (res, rej) {
-      // 请求之前... todo
-      // 请求中...
-      uni.request(_objectSpread({},
-      options, {
-        success: function success(result) {
-          // 服务端失败
-          if (result.statusCode !== 200) {
-            if (options.toast !== false) {
-              uni.showToast({
-                title: result.data.msg || '服务端失败',
-                icon: 'none' });
+                console.log(_context.t0);
+                state.userInfo = {};
+                state.loginStatus = false;
+                state.token = null;
+                uni.removeStorageSync('userInfo');case 25:case "end":return _context.stop();}}}, _callee, this, [[2, 18]]);}));function initUser(_x) {return _initUser.apply(this, arguments);}return initUser;}(),
 
-            }
-            return rej(result.data);
-          }
-          // 成功
-          var data = result.data.data;
-          res(data);
-        },
-        fail: function fail(error) {
-          uni.showToast({
-            title: error.errMsg || '请求失败',
-            icon: 'none' });
 
-          return rej();
-        } }));
-
-    });
-  },
-  // get请求
-  get: function get(url) {var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-    options.url = url;
-    options.data = data;
-    options.method = 'GET';
-    return this.request(options);
-  },
-  // post请求
-  post: function post(url) {var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-    options.url = url;
-    options.data = data;
-    options.method = 'POST';
-    return this.request(options);
-  } };exports.default = _default;
+    // 登录
+    login: function login(state, userInfo) {
+      state.userInfo = userInfo;
+      state.token = userInfo.token;
+      state.loginStatus = true;
+      // 持久化存储
+      uni.setStorageSync('userInfo', JSON.stringify(state.userInfo));
+    },
+    // 退出登录
+    logout: function logout(state) {
+      state.userInfo = {};
+      state.loginStatus = false;
+      state.token = null;
+      uni.removeStorageSync('userInfo');
+    } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
@@ -9071,19 +9040,19 @@ internalMixin(Vue);
 
 /***/ }),
 
-/***/ 26:
+/***/ 20:
 /*!**********************************************************!*\
   !*** ./node_modules/@babel/runtime/regenerator/index.js ***!
   \**********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! regenerator-runtime */ 27);
+module.exports = __webpack_require__(/*! regenerator-runtime */ 21);
 
 
 /***/ }),
 
-/***/ 27:
+/***/ 21:
 /*!************************************************************!*\
   !*** ./node_modules/regenerator-runtime/runtime-module.js ***!
   \************************************************************/
@@ -9114,7 +9083,7 @@ var oldRuntime = hadRuntime && g.regeneratorRuntime;
 // Force reevalutation of runtime.js.
 g.regeneratorRuntime = undefined;
 
-module.exports = __webpack_require__(/*! ./runtime */ 28);
+module.exports = __webpack_require__(/*! ./runtime */ 22);
 
 if (hadRuntime) {
   // Restore the original runtime.
@@ -9131,7 +9100,7 @@ if (hadRuntime) {
 
 /***/ }),
 
-/***/ 28:
+/***/ 22:
 /*!*****************************************************!*\
   !*** ./node_modules/regenerator-runtime/runtime.js ***!
   \*****************************************************/
@@ -9863,6 +9832,138 @@ if (hadRuntime) {
 
 /***/ }),
 
+/***/ 23:
+/*!****************************************************************************!*\
+  !*** C:/Users/GGGBB/Documents/Projects/uni_wx_login/common/lib/request.js ***!
+  \****************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _index = _interopRequireDefault(__webpack_require__(/*! @/store/index.js */ 15));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _default =
+{
+  // 全局配置
+  common: {
+    baseUrl: "http://ceshi3.dishait.cn/api",
+    header: _defineProperty({
+      'Content-Type': 'application/json;charset=UTF-8' }, "Content-Type",
+    'application/x-www-form-urlencoded'),
+
+    data: {},
+    method: 'GET',
+    dataType: 'json' },
+
+  // 请求 返回promise
+  request: function request() {var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    // 组织参数
+    options.url = /47.106.125.164/.test(options.url) ? options.url : this.common.baseUrl + options.url;
+    options.header = options.header || this.common.header;
+    options.data = options.data || this.common.data;
+    options.method = options.method || this.common.method;
+    options.dataType = options.dataType || this.common.dataType;
+
+    // token
+    if (options.token) {
+      options.header.Authorization = _index.default.state.user.token;
+
+      // 二次验证
+      if (options.checkToken && !options.header.Authorization) {
+        uni.showToast({
+          title: '请先登录',
+          icon: 'none' });
+
+        return uni.navigateTo({
+          url: '/pages/login/login' });
+
+      }
+    }
+
+    delete options.token;
+
+    // 请求
+    return new Promise(function (res, rej) {
+      // 请求之前... todo
+      // 请求中...
+      uni.request(_objectSpread({},
+      options, {
+        success: function success(result) {
+          console.log(result);
+          result.data.code = result.data.code ? result.data.code : result.statusCode;
+          // 服务端失败
+          if (result.statusCode !== 200 || result.data.code !== 200) {
+            if (options.toast !== false) {
+              uni.showToast({
+                title: result.data.msg || '服务端失败',
+                icon: 'none' });
+
+            }
+
+            return rej(result.data);
+          }
+
+          // 成功
+          var data = result.data.data;
+          res(data);
+        },
+        fail: function fail(error) {
+          console.log(error);
+          uni.showToast({
+            title: error.errMsg || '请求失败',
+            icon: 'none' });
+
+          return rej(error);
+        } }));
+
+    });
+  },
+  // get请求
+  get: function get(url) {var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    options.url = url;
+    options.data = data;
+    options.method = 'GET';
+    return this.request(options);
+  },
+  // post请求
+  post: function post(url) {var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    options.url = url;
+    options.data = data;
+    options.method = 'POST';
+    return this.request(options);
+  },
+  // delete请求
+  del: function del(url) {var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    options.url = url;
+    options.data = data;
+    options.method = 'DELETE';
+    return this.request(options);
+  },
+  // PUT请求
+  put: function put(url) {var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    options.url = url;
+    options.data = data;
+    options.method = 'PUT';
+    return this.request(options);
+  }
+  // 错误处理
+  // errorCheck(err, res, 
+  // errfun = false, resfun = false) {
+  // 	if (err) {
+  // 		typeof errfun === 'function' && errfun()
+  // 		uni.showToast({ title: '加载失败', icon: "none" })
+  // 		return false
+  // 	}
+  // 	if (res.data.errorCode) {
+  // 		typeof resfun === 'function' && resfun()
+  // 		uni.showToast({ title: res.data.msg, icon: "none" })
+  // 		return false
+  // 	}
+  // 	return true
+  // }
+};exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
+
+/***/ }),
+
 /***/ 3:
 /*!***********************************!*\
   !*** (webpack)/buildin/global.js ***!
@@ -9894,7 +9995,7 @@ module.exports = g;
 
 /***/ }),
 
-/***/ 331:
+/***/ 332:
 /*!*****************************************************************************************************!*\
   !*** C:/Users/GGGBB/Documents/Projects/uni_wx_login/components/uni-ui/uParse/src/libs/html2json.js ***!
   \*****************************************************************************************************/
@@ -9916,8 +10017,8 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
-var _wxDiscode = _interopRequireDefault(__webpack_require__(/*! ./wxDiscode */ 332));
-var _htmlparser = _interopRequireDefault(__webpack_require__(/*! ./htmlparser */ 333));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} /**
+var _wxDiscode = _interopRequireDefault(__webpack_require__(/*! ./wxDiscode */ 333));
+var _htmlparser = _interopRequireDefault(__webpack_require__(/*! ./htmlparser */ 334));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} /**
                                                                                                                                                                  * html2Json 改造来自: https://github.com/Jxck/html2json
                                                                                                                                                                  *
                                                                                                                                                                  *
@@ -10166,7 +10267,7 @@ html2json;exports.default = _default;
 
 /***/ }),
 
-/***/ 332:
+/***/ 333:
 /*!*****************************************************************************************************!*\
   !*** C:/Users/GGGBB/Documents/Projects/uni_wx_login/components/uni-ui/uParse/src/libs/wxDiscode.js ***!
   \*****************************************************************************************************/
@@ -10371,7 +10472,7 @@ function urlToHttpUrl(url, domain) {
 
 /***/ }),
 
-/***/ 333:
+/***/ 334:
 /*!******************************************************************************************************!*\
   !*** C:/Users/GGGBB/Documents/Projects/uni_wx_login/components/uni-ui/uParse/src/libs/htmlparser.js ***!
   \******************************************************************************************************/
@@ -10538,31 +10639,7 @@ HTMLParser;exports.default = _default;
 
 /***/ }),
 
-/***/ 35:
-/*!******************************************************************************!*\
-  !*** C:/Users/GGGBB/Documents/Projects/uni_wx_login/common/mixin/loading.js ***!
-  \******************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = {
-  data: function data() {
-    return {
-      beforeReady: true };
-
-  },
-  onReady: function onReady() {var _this = this;
-    this.$nextTick(function () {
-      setTimeout(function () {
-        _this.beforeReady = false;
-      }, 500);
-    });
-  } };exports.default = _default;
-
-/***/ }),
-
-/***/ 351:
+/***/ 352:
 /*!***************************************************************************************************************!*\
   !*** C:/Users/GGGBB/Documents/Projects/uni_wx_login/components/uni-ui/mpvue-citypicker/city-data/province.js ***!
   \***************************************************************************************************************/
@@ -10712,7 +10789,7 @@ provinceData;exports.default = _default;
 
 /***/ }),
 
-/***/ 352:
+/***/ 353:
 /*!***********************************************************************************************************!*\
   !*** C:/Users/GGGBB/Documents/Projects/uni_wx_login/components/uni-ui/mpvue-citypicker/city-data/city.js ***!
   \***********************************************************************************************************/
@@ -12226,7 +12303,7 @@ cityData;exports.default = _default;
 
 /***/ }),
 
-/***/ 353:
+/***/ 354:
 /*!***********************************************************************************************************!*\
   !*** C:/Users/GGGBB/Documents/Projects/uni_wx_login/components/uni-ui/mpvue-citypicker/city-data/area.js ***!
   \***********************************************************************************************************/
@@ -24779,6 +24856,30 @@ areaData;exports.default = _default;
 
 /***/ }),
 
+/***/ 36:
+/*!******************************************************************************!*\
+  !*** C:/Users/GGGBB/Documents/Projects/uni_wx_login/common/mixin/loading.js ***!
+  \******************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = {
+  data: function data() {
+    return {
+      beforeReady: true };
+
+  },
+  onReady: function onReady() {var _this = this;
+    this.$nextTick(function () {
+      setTimeout(function () {
+        _this.beforeReady = false;
+      }, 500);
+    });
+  } };exports.default = _default;
+
+/***/ }),
+
 /***/ 4:
 /*!*****************************************************************!*\
   !*** C:/Users/GGGBB/Documents/Projects/uni_wx_login/pages.json ***!
@@ -24788,55 +24889,6 @@ areaData;exports.default = _default;
 
 "use strict";
 
-
-/***/ }),
-
-/***/ 468:
-/*!****************************************************************************!*\
-  !*** C:/Users/GGGBB/Documents/Projects/uni_wx_login/store/modules/user.js ***!
-  \****************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = {
-  state: {
-    // 登录状态
-    loginStatus: false,
-    // token
-    token: null,
-    // 用户信息
-    userInfo: {} },
-
-  mutations: {
-    // 初始化登录状态
-    initUser: function initUser(state) {
-      var userInfo = uni.getStorageSync('userInfo');
-      if (userInfo) {
-        userInfo = JSON.parse(userInfo);
-        if (userInfo.token) {
-          state.userInfo = userInfo;
-          state.token = userInfo.token;
-          state.loginStatus = true;
-        }
-      }
-    },
-    // 登录
-    login: function login(state, userInfo) {
-      state.userInfo = userInfo;
-      state.token = userInfo.token;
-      state.loginStatus = true;
-      // 持久化存储
-      uni.setStorageSync('userInfo', JSON.stringify(state.userInfo));
-    },
-    // 退出登录
-    logout: function logout(state) {
-      state.userInfo = {};
-      state.loginStatus = false;
-      state.token = null;
-      uni.removeStorageSync('userInfo');
-    } } };exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
 
@@ -25746,7 +25798,7 @@ module.exports = {"_from":"@dcloudio/uni-stat@alpha","_id":"@dcloudio/uni-stat@2
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "pages": { "pages/index/index": {}, "pages/class/class": {}, "pages/cart/cart": {}, "pages/my/my": {}, "pages/ceshi/ceshi": {}, "pages/search/search": {}, "pages/search-list/search-list": { "enablePullDownRefresh": true }, "pages/detail/detail": {}, "pages/detail-comment/detail-comment": { "navigationBarTitleText": "商品评价", "enablePullDownRefresh": true }, "pages/user-set/user-set": { "navigationBarTitleText": "用户设置" }, "pages/user-userinfo/user-userinfo": { "navigationBarTitleText": "修改资料" }, "pages/user-path-list/user-path-list": { "navigationBarTitleText": "收货地址" }, "pages/user-path-edit/user-path-edit": { "navigationBarTitleText": "增加收货地址" }, "pages/order/order": { "navigationBarTitleText": "我的订单" }, "pages/order-confirm/order-confirm": { "navigationBarTitleText": "订单配送至", "navigationBarBackgroundColor": "#FD6801", "navigationBarTextStyle": "white" }, "pages/order-invoice/order-invoice": { "navigationBarTitleText": "发票" }, "pages/login/login": {}, "pages/msg-list/msg-list": { "navigationBarTitleText": "消息列表" }, "pages/msg-detail/msg-detail": { "navigationBarTitleText": "消息详情页" }, "pages/pay-methods/pay-methods": { "navigationBarTitleText": "选择支付方式" }, "pages/pay-result/pay-result": { "navigationBarTitleText": "支付成功" }, "pages/order-coupon/order-coupon": { "navigationBarTitleText": "优惠券" }, "pages/order-detail/order-detail": {}, "pages/logistics-detail/logistics-detail": { "navigationBarTitleText": "物流信息" }, "pages/after-sale/after-sale": { "navigationBarTitleText": "申请售后" }, "pages/about/about": { "navigationBarTitleText": "关于xxx商城" } }, "globalStyle": { "navigationBarTextStyle": "black", "navigationBarTitleText": "仿小米商城", "navigationBarBackgroundColor": "#FFFFFF", "backgroundColor": "#FFFFFF" } };exports.default = _default;
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "pages": { "pages/index/index": {}, "pages/class/class": {}, "pages/cart/cart": {}, "pages/my/my": {}, "pages/ceshi/ceshi": {}, "pages/search/search": {}, "pages/search-list/search-list": { "enablePullDownRefresh": true }, "pages/detail/detail": {}, "pages/detail-comment/detail-comment": { "navigationBarTitleText": "商品评价", "enablePullDownRefresh": true }, "pages/user-set/user-set": { "navigationBarTitleText": "用户设置" }, "pages/user-userinfo/user-userinfo": { "navigationBarTitleText": "修改资料" }, "pages/user-path-list/user-path-list": { "navigationBarTitleText": "收货地址" }, "pages/user-path-edit/user-path-edit": { "navigationBarTitleText": "增加收货地址" }, "pages/order/order": { "navigationBarTitleText": "我的订单" }, "pages/order-confirm/order-confirm": { "navigationBarTitleText": "订单配送至", "navigationBarBackgroundColor": "#FD6801", "navigationBarTextStyle": "white" }, "pages/order-invoice/order-invoice": { "navigationBarTitleText": "发票" }, "pages/login/login": {}, "pages/msg-list/msg-list": { "navigationBarTitleText": "消息列表" }, "pages/msg-detail/msg-detail": { "navigationBarTitleText": "消息详情页" }, "pages/pay-methods/pay-methods": { "navigationBarTitleText": "选择支付方式" }, "pages/pay-result/pay-result": { "navigationBarTitleText": "支付成功" }, "pages/order-coupon/order-coupon": { "navigationBarTitleText": "优惠券" }, "pages/order-detail/order-detail": {}, "pages/logistics-detail/logistics-detail": { "navigationBarTitleText": "物流信息" }, "pages/after-sale/after-sale": { "navigationBarTitleText": "申请售后" }, "pages/about/about": { "navigationBarTitleText": "关于xxx商城" } }, "globalStyle": { "navigationBarTextStyle": "black", "navigationBarTitleText": "uni_shop", "navigationBarBackgroundColor": "#FFFFFF", "backgroundColor": "#FFFFFF" } };exports.default = _default;
 
 /***/ }),
 
@@ -25762,7 +25814,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 /***/ }),
 
-/***/ 82:
+/***/ 83:
 /*!*************************************************************************!*\
   !*** C:/Users/GGGBB/Documents/Projects/uni_wx_login/common/lib/time.js ***!
   \*************************************************************************/
